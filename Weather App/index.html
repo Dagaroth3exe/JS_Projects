@@ -37,5 +37,21 @@
         </div>
     </div>
 
+    <script>
+
+        const apiKey = "533449312fa46271b6a4f1f77b1edcd4";
+        const apiURL = "https://api.openweathermap.org/data/2.5/weather?q=Kanpur";
+
+        async function checkWeather(){
+            const response = await fetch(apiURL + 'appid=${apiKey}');
+            var data = await response.json();
+
+            console.log(data);
+        }
+
+        checkWeather()
+
+    </script>
+
 </body>
 </html>
