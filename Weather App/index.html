@@ -39,17 +39,37 @@
 
     <script>
 
-        const apiKey = "533449312fa46271b6a4f1f77b1edcd4";
-        const apiURL = "https://api.openweathermap.org/data/2.5/weather?q=Kanpur";
+        const apiKey = "619746672b272ceac01b8494a0ad287b";
+        const apiURL = "https://api.openweathermap.org/data/2.5/weather?&units=metric&u=Mumbai";
 
-        async function checkWeather(){
-            const response = await fetch(apiURL + 'appid=${apiKey}');
-            var data = await response.json();
+        async function checkWeather(cityName) {
+            try {
+        // 1. Geocode the city name
+                const geocodingUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityName)}&format=json`;
+                const geocodingResponse = await fetch(geocodingUrl);
+                const geocodingData = await geocodingResponse.json();
 
-            console.log(data);
+                if (geocodingData.length === 0) {
+                    throw new Error("Location not found");
+                }
+
+                const lat = geocodingData[0].lat;
+                const lon = geocodingData[0].lon;
+
+                // 2. Fetch weather data using coordinates
+                const apiURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+                const response = await fetch(apiURL);
+                const data = await response.json();
+
+                console.log(data);
+            }   
+            catch (error) {
+                console.error("Error fetching weather data:", error);
+            }
         }
 
-        checkWeather()
+        // Example usage
+        checkWeather("Shillong");
 
     </script>
 
